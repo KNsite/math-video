@@ -14,12 +14,14 @@
      （並び順は自動で番号順になります）
    ・title を付けると番号の下に小さく表示されます
        例：{ no: 24, url: "...", title: "2次関数の最大・最小" }
+   ・番号のない動画は { title: "動画の名前", url: "リンク" }, で追加
+     （書いた順に並びます。数学Bの統計など）
    ================================================================= */
 const LIB = {
   title: "数学 動画ライブラリ",
   subtitle: "問題集の番号から、解説動画をすぐに開けます",
   // 数学ノートのURL（わかったら "#" を差し替え）
-  noteUrl: "#",
+  noteUrl: "https://knsite.github.io/math-note/",
   notice: "動画は学校のMicrosoftアカウントでサインインすると見られます。",
 
   subjects: [
@@ -56,6 +58,19 @@ const LIB = {
         { no: 116, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQAhzSLzsL53RYPg0MDvvaseAfR9G_mZhQVhxo-1_aBBkQc?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=Yhcd65" },
         { no: 123, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQDtI4XxzNm3RqAiI-d-TpjWAf5z3pXqlnDzTvo2Eh1fvJ4?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=fN6aIK" },
         { no: 128, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQD4GWo2O4UdT7CZsbWU0QcEAXXW1RpeiQ7efOmiBpWrwyQ?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=o6zvNx" }
+      ]}
+    ]},
+    { id: "mb", name: "数学B", book: "", groups: [
+      { name: "統計的な推測", label: "", videos: [
+        { title: "確率変数と期待値・分散・標準偏差", url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQAeaeXuJPPbSol_mQZMBLEGAaWXdok24DbbbwHYqaXNfIg?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=I0LHTR" },
+        { title: "期待値・分散・標準偏差の変換", url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQCcYt1fj8SLTIN4WDAU0-tiAfWL0n4T_lQCOKvHT6Mlwvc?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=E8VuT6" },
+        { title: "二項分布", url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQA3Z4DAjW8AQ7_CtPvGGmJPAZyDRpSujcPlGtwbD7NSnKw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=lXCirx" },
+        { title: "正規分布", url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQAZ9cLTARwpT6b4glp3mO3aAYZDIBen_8zwDlWLrh_gOME?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=f1Q776" },
+        { title: "二項分布と正規分布", url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQDWPMd8EeNuR4d7kPoG3LRtAeAvISgqu0YQAC6wg3-yWDY?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=qc91nz" },
+        { title: "母集団と標本", url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQC8LlW6URVpRrL3qmaaLhAPAfMn2BlcLgE_iv78ls5TsnI?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=ttJaMj" },
+        { title: "標本平均の分布", url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQBWixkxk9VqSqZHTJAXaJ2FAZwKz3br7dr1401Csdx5pxY?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=AFuMXd" },
+        { title: "推定", url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQA8YQcaLUzpSYEwL8g439WEAa2Tc6ZzBMhG_LAqAG5Yd7U?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=iqhp2v" },
+        { title: "仮説検定", url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQC8yZJCZyEIQJ2X2GUuPf5zAZgv3pzPYLaaAQQjryD_7Vw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=v0sRej" }
       ]}
     ]}
   ]
@@ -139,7 +154,11 @@ main{max-width:1040px;margin:0 auto;padding:24px 16px 56px;display:grid;gap:22px
 .tile .n{font-size:2rem;font-weight:700;line-height:1.1}
 .tile .t{font-size:.75rem;color:var(--ink-soft);line-height:1.35;margin-top:2px}
 .tile .play{font-size:.72rem;margin-top:4px;color:var(--ink-soft)}
-.STEP{--tc:var(--chalk-blue)} .TRIAL{--tc:var(--chalk-pink)}
+.STEP{--tc:var(--chalk-blue)} .TRIAL{--tc:var(--chalk-pink)} .plain{--tc:var(--chalk-yellow)}
+.tiles.wide{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+.tile.named{min-height:110px;padding:12px 10px}
+.tile.named .k{font-size:.85rem;width:1.8em;height:1.8em;line-height:1.8em;border-radius:50%;background:var(--tc);color:#2b2b2b;letter-spacing:0;margin-bottom:6px}
+.tile .nm{font-size:1.02rem;font-weight:700;line-height:1.45}
 .empty{background:var(--paper);border-radius:3px;padding:14px;margin:0}
 .back{color:#fff;font-size:.92rem}
 footer{text-align:center;color:var(--ink-soft);font-size:.85rem;padding:0 16px 32px}
@@ -181,33 +200,43 @@ footer{text-align:center;color:var(--ink-soft);font-size:.85rem;padding:0 16px 3
   }
 
   let filter = "all", query = "";
+  const numbered = s => s.groups.some(g => g.videos.some(v => v.no != null));
   function subject(s){
-    const segs = [{id:"all", name:"すべて"}, ...s.groups.map(g => ({id:g.name, name:`${g.name}（${g.label}）`}))];
+    const segs = [{id:"all", name:"すべて"}, ...s.groups.map(g => ({id:g.name, name: g.label ? `${g.name}（${g.label}）` : g.name}))];
     return `${note}
     <section class="cork">
       <h2>${esc(s.name)}</h2>
       <p class="meta">${esc(s.book || "")}　<a class="back" href="#home">科目一覧へ</a></p>
       <div class="find">
-        <label for="q">問題番号</label>
-        <input id="q" inputmode="numeric" autocomplete="off" placeholder="例：24" value="${esc(query)}">
-        <div class="seg" role="group" aria-label="種類">${segs.map(x => `<button data-f="${x.id}" aria-pressed="${filter === x.id}">${esc(x.name)}</button>`).join("")}</div>
+        <label for="q">${numbered(s) ? "問題番号" : "さがす"}</label>
+        <input id="q" ${numbered(s) ? 'inputmode="numeric"' : ""} autocomplete="off" placeholder="${numbered(s) ? "例：24" : "例：正規分布"}" value="${esc(query)}">
+        ${s.groups.length > 1 ? `<div class="seg" role="group" aria-label="種類">${segs.map(x => `<button data-f="${x.id}" aria-pressed="${filter === x.id}">${esc(x.name)}</button>`).join("")}</div>` : ""}
         <span class="count" id="count" role="status"></span>
       </div>
       <div id="groups"></div>
     </section>`;
   }
   function renderGroups(s){
-    const q = query.replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).replace(/[^0-9]/g, "");
+    const raw = query.trim();
+    const q = raw.replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0));
+    const digits = q.replace(/[^0-9]/g, "");
+    const hit = v => !q || (v.no != null ? (digits && String(v.no).startsWith(digits)) : String(v.title || "").includes(q));
     let n = 0;
     const html = s.groups.filter(g => filter === "all" || filter === g.name).map(g => {
-      const vs = [...g.videos].sort((a,b) => a.no - b.no).filter(v => !q || String(v.no).startsWith(q));
+      const isNum = g.videos.some(v => v.no != null);
+      const list = g.videos.map((v,i) => ({...v, order: i + 1}));
+      const vs = (isNum ? list.sort((a,b) => a.no - b.no) : list).filter(hit);
       n += vs.length;
       if (!vs.length) return "";
-      return `<div class="group ${esc(g.name)}"><h3>${esc(g.name)}<small>${esc(g.label)}</small></h3>
-        <ul class="tiles">${vs.map(v => `<li><a class="tile" href="${esc(v.url)}" target="_blank" rel="noopener" aria-label="${esc(g.name)} ${v.no} の解説動画を開く">
-          <span class="k">${esc(g.name)}</span><span class="n">${v.no}</span>${v.title ? `<span class="t">${esc(v.title)}</span>` : ""}<span class="play">▶ 動画</span></a></li>`).join("")}</ul></div>`;
+      const cls = ["STEP","TRIAL"].includes(g.name) ? g.name : "plain";
+      return `<div class="group ${cls}"><h3>${esc(g.name)}${g.label ? `<small>${esc(g.label)}</small>` : ""}</h3>
+        <ul class="tiles ${isNum ? "" : "wide"}">${vs.map(v => v.no != null
+          ? `<li><a class="tile" href="${esc(v.url)}" target="_blank" rel="noopener" aria-label="${esc(g.name)} ${v.no} の解説動画を開く">
+          <span class="k">${esc(g.name)}</span><span class="n">${v.no}</span>${v.title ? `<span class="t">${esc(v.title)}</span>` : ""}<span class="play">▶ 動画</span></a></li>`
+          : `<li><a class="tile named" href="${esc(v.url)}" target="_blank" rel="noopener" aria-label="${esc(v.title)} の解説動画を開く">
+          <span class="k">${v.order}</span><span class="nm">${esc(v.title)}</span><span class="play">▶ 動画</span></a></li>`).join("")}</ul></div>`;
     }).join("");
-    $("#groups").innerHTML = html || `<div class="group"><p class="empty">${q ? `${esc(q)} 番の動画はまだありません。番号を確かめるか、「すべて」を選んでください。` : "まだ動画が登録されていません。"}</p></div>`;
+    $("#groups").innerHTML = html || `<div class="group"><p class="empty">${q ? `「${esc(q)}」に合う動画は見つかりませんでした。` : "まだ動画が登録されていません。"}</p></div>`;
     $("#count").textContent = `${n}本`;
   }
 
