@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>数学ノート</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet">
+<script>
+/* =================================================================
+   ここだけ書き換えればOK（GitHub上で直接編集できます）
+   ・日付は "YYYY-MM-DD" 形式
+   ・項目を増やすときは { ... }, をコピーして貼り付け
+   ・リンクの type は次の4種類
+       "graph"（グラフ）/ "print"（プリント）/ "video"（動画）/ "link"（その他）
+   ・提出物に course: "m1" のように書くと、その科目のページにも表示されます
+       r1=数学理解Ⅰ  m1=数学Ⅰ  ma=数学A  m2=数学Ⅱ  mb=数学B  m3=数学Ⅲ  mc=数学C
+   ================================================================= */
+const SITE = {
+  title: "数学ノート",
+  subtitle: "お知らせ・提出物・各授業のページへの入口です",
+  // 編集途中の表示（完成したら false に）
+  editing: true,
+
+  notices: [
+    { date: "2026-11-11", text: "来週の小テストは「場合の数と確率」の範囲です。" },
+    { date: "2026-11-06", text: "リンク集に「授業で使うグラフ」を追加しました。" }
+  ],
+
+  assignments: [
+    { due: "2026-11-18", course: "ma", title: "確率 演習プリント", note: "授業の最初に回収します" },
+    { due: "2026-11-25", course: "m1", title: "教科書 2次関数 練習問題", note: "ノートに解いて提出" },
+    { due: "2026-11-04", course: "ma", title: "場合の数 まとめプリント", note: "" }
+  ],
+
+  // 数学 動画ライブラリのURL（公開URLがわかったら "#" を差し替え）
+  videoLibrary: "#",
+
+  links: [
+    { title: "数学 動画ライブラリ", url: "VIDEO_LIBRARY", note: "考査前の復習用の解説動画" },
+    { title: "数学教材ライブラリ", url: "#", note: "プリントと動画を単元別に" }
+  ]
+};
+
+/* ---------- 考査範囲 ----------
+   ・考査を増やすときは { name: ..., subjects: [...] }, をコピー
+   ・subjects の course は上と同じ記号（m1, ma, m2, mb, m3, mc）
+   ・range は1行ずつ "..." で区切って書く
+   ・announce（考査発表日）より前は範囲を表示せず、発表日だけを表示します
+   ・終わった考査は消すか、下に残しておけば「終了」と表示されます */
+const EXAMS = [
+  { name: "2学期期末考査", announce: "2026-11-16", start: "2026-11-26", end: "2026-12-02",
+    subjects: [
+      { course: "m1", date: "2026-11-27", period: "2限",
+        range: ["2次関数（グラフと最大・最小、2次不等式まで）", "教科書 p.80〜p.118", "傍用問題集 p.40〜p.58"],
+        bring: "定規", note: "問題集は考査初日に提出" },
+      { course: "ma", date: "2026-12-01", period: "1限",
+        range: ["場合の数と確率（確率の基本〜反復試行の確率）", "教科書 p.30〜p.62", "確率プリント 全部"],
+        bring: "", note: "プリントは考査当日に回収" }
+    ]
+  }
+];
+
+const COURSES = [
+  { id: "m1", name: "数学Ⅰ", units: [
+    { name: "数と式", items: [] },
+    { name: "集合と命題", items: [] },
+    { name: "2次関数", items: [
+      { type: "graph", title: "y = a(x−p)² + q の平行移動", url: "#", note: "a・p・q を動かして形と頂点を確認" },
+      { type: "graph", title: "2次関数の最大・最小（定義域が動く）", url: "#", note: "" },
+      { type: "print", title: "2次関数 授業プリント①", url: "#", note: "" }
+    ]},
+    { name: "図形と計量", items: [
+      { type: "graph", title: "単位円と三角比", url: "#", note: "" }
+    ]},
+    { name: "データの分析", items: [] }
+  ]},
+  /* 数学理解Ⅰ：教材は数研出版「ニューステージ」受験編
+     解説動画はすべて「数学 動画ライブラリ」に置く（videoLibrary: true でリンクを表示） */
+  { id: "r1", name: "数学理解Ⅰ", videoLibrary: true, units: [] },
+  { id: "ma", name: "数学A", units: [
+    { name: "図形の性質", items: [] },
+    { name: "場合の数と確率", items: [
+      { type: "print", title: "確率 導入プリント", url: "#", note: "" },
+      { type: "video", title: "反復試行の確率 解説", url: "#", note: "" }
+    ]},
+    { name: "数学と人間の活動", items: [] }
+  ]},
+  { id: "m2", name: "数学Ⅱ", units: [
+    { name: "いろいろな式", items: [] },
+    { name: "図形と方程式", items: [] },
+    { name: "指数関数・対数関数", items: [
+      { type: "graph", title: "y = aˣ と y = logₐx", url: "#", note: "底 a を動かして比べる" }
+    ]},
+    { name: "三角関数", items: [
+      { type: "graph", title: "y = a sin(bx) のグラフ", url: "#", note: "" }
+    ]},
+    { name: "微分・積分の考え", items: [] }
+  ]},
+  { id: "mb", name: "数学B", units: [
+    { name: "数列", items: [] },
+    { name: "統計的な推測", items: [] },
+    { name: "数学と社会生活", items: [] }
+  ]},
+  { id: "m3", name: "数学Ⅲ", units: [
+    { name: "極限", items: [] },
+    { name: "微分法", items: [] },
+    { name: "積分法", items: [] }
+  ]},
+  { id: "mc", name: "数学C", units: [
+    { name: "ベクトル", items: [] },
+    { name: "平面上の曲線と複素数平面", items: [] },
+    { name: "数学的な表現の工夫", items: [] }
+  ]}
+];
+</script>
+<style>
+:root{
+  --paper:#F6F8FB; --sheet:#FFFFFF; --grid:#D9E6F2; --ink:#1E3A5F; --ink-soft:#4E6380;
+  --red:#C8323A; --marker:#FFE36E; --line:#C9D6E3;
+  --m1:#2F6DB5; --ma:#C8323A; --m2:#2E7D4F; --mb:#B36A00; --m3:#6A45A8; --mc:#0F7F86; --r1:#A8336F;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#141B24; --sheet:#1B2430; --grid:#222E3B; --ink:#E3ECF6; --ink-soft:#A6B6C9;
+    --red:#FF7A7F; --marker:#7A6A1E; --line:#334355;
+    --m1:#7FB0F0; --ma:#FF8A8F; --m2:#6FD39B; --mb:#F0B45C; --m3:#B79BEA; --mc:#5FD0D6; --r1:#F28CC0;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#141B24; --sheet:#1B2430; --grid:#222E3B; --ink:#E3ECF6; --ink-soft:#A6B6C9;
+  --red:#FF7A7F; --marker:#7A6A1E; --line:#334355;
+  --m1:#7FB0F0; --ma:#FF8A8F; --m2:#6FD39B; --mb:#F0B45C; --m3:#B79BEA; --mc:#5FD0D6; --r1:#F28CC0;
+  color-scheme:dark;
+}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px)}
+*,*::before,*::after{box-sizing:inherit}
+body{
+  margin:0;color:var(--ink);background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:24px 24px;
+  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+  line-height:1.75;font-size:16px;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--sheet)}
+h1,h2,h3{font-family:"Klee One","Hiragino Mincho ProN","Yu Mincho",serif;font-weight:600;margin:0}
+a{color:var(--ink)}
+:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+
+.top{max-width:1080px;margin:0 auto;padding:40px 20px 8px}
+.top h1{font-size:clamp(2.4rem,7vw,3.6rem);line-height:1.15;letter-spacing:.04em}
+.top h1 a{text-decoration:none}
+.top .meta{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;margin-top:8px;color:var(--ink-soft)}
+.top .cls{font-family:"Klee One",serif;font-size:1.25rem;color:var(--red);font-weight:600}
+
+/* インデックスタブ */
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--sheet);border-bottom:1px solid var(--line)}
+nav ul{max-width:1080px;margin:0 auto;padding:8px 12px 0;list-style:none;display:flex;gap:4px;overflow-x:auto}
+nav a{display:block;padding:7px 12px 6px;text-decoration:none;white-space:nowrap;font-weight:700;font-size:.92rem;color:var(--ink-soft);border:1px solid transparent;border-bottom:0;border-radius:6px 6px 0 0;border-top:4px solid var(--tab,transparent)}
+nav a:hover{color:var(--ink)}
+nav a[aria-current="page"]{color:var(--ink);background:var(--paper);border-color:var(--line);border-top-color:var(--tab,var(--ink))}
+
+main{max-width:1080px;margin:0 auto;padding:24px 20px 64px;display:grid;gap:28px}
+.row{display:grid;gap:28px;grid-template-columns:1fr}
+@media (min-width:820px){.row{grid-template-columns:1fr 1fr}}
+.sheet{background:var(--sheet);border:1px solid var(--line);border-radius:6px;padding:22px 22px 24px;min-width:0}
+.sheet h2{font-size:1.6rem;display:inline;background:linear-gradient(transparent 58%,var(--marker) 58%);padding:0 4px}
+.head{margin-bottom:14px;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px}
+.hint{color:var(--ink-soft);font-size:.9rem;margin:0}
+.empty{color:var(--ink-soft);font-size:.92rem}
+
+/* お知らせ・提出物 */
+.notices,.tasks,.items{list-style:none;margin:0;padding:0}
+.notices li{padding:10px 0;border-bottom:1px dashed var(--line);display:grid;grid-template-columns:auto 1fr;gap:12px}
+.notices li:last-child,.tasks li:last-child{border-bottom:0}
+.notices time{font-family:"Klee One",serif;font-weight:600;color:var(--ink-soft);white-space:nowrap}
+.tasks li{padding:10px 0;border-bottom:1px dashed var(--line);display:grid;grid-template-columns:4.6em 1fr;gap:12px;align-items:start}
+.left{font-family:"Klee One",serif;font-weight:600;text-align:center;border:2px solid var(--ink);border-radius:4px;padding:2px 0;line-height:1.3}
+.left small{display:block;font-size:.72rem;font-weight:400}
+.left.soon{border-color:var(--red);color:var(--red)}
+.tasks li.done{opacity:.5}
+.tasks li.done .left{border-style:dashed}
+.tasks .t{font-weight:700}
+.tasks .n{color:var(--ink-soft);font-size:.9rem}
+.tag{display:inline-block;font-size:.75rem;font-weight:700;color:var(--sheet);background:var(--c);border-radius:3px;padding:0 6px;margin-right:6px;vertical-align:1px}
+
+/* 授業ページ入口 */
+.courses{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+.course{display:block;text-decoration:none;background:var(--sheet);border:1px solid var(--line);border-top:8px solid var(--c);border-radius:4px 4px 6px 6px;padding:14px 16px 12px}
+.course:hover{border-color:var(--c)}
+.course .cn{font-family:"Klee One",serif;font-weight:600;font-size:1.6rem;line-height:1.2;color:var(--c)}
+.course .cu{display:block;font-size:.82rem;color:var(--ink-soft);margin-top:6px;line-height:1.5}
+.course .cc{display:block;font-size:.82rem;margin-top:6px;font-weight:700}
+
+/* 単元・リンク */
+.unit-nav{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 4px;padding:0;list-style:none}
+.unit-nav a{display:block;font-size:.88rem;text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:2px 12px;background:var(--sheet)}
+.unit-nav a:hover{border-color:var(--c)}
+.unit h3{font-size:1.35rem;padding-left:10px;border-left:5px solid var(--c);margin-bottom:10px;line-height:1.4}
+.items{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.items a{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:start;padding:10px 12px;border:1px solid var(--line);border-radius:4px;text-decoration:none;background:var(--paper)}
+.items a:hover{border-color:var(--ink)}
+.kind{font-size:.75rem;font-weight:700;border:1.5px solid currentColor;border-radius:3px;padding:0 5px;margin-top:3px;white-space:nowrap}
+.kind.graph{color:var(--m1)} .kind.print{color:var(--m2)} .kind.video{color:var(--ma)} .kind.link{color:var(--ink-soft)}
+.it{font-weight:700;line-height:1.5}
+.in{grid-column:2;font-size:.85rem;color:var(--ink-soft);line-height:1.5}
+.course-title{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 16px}
+.course-title h2{font-size:2.4rem;color:var(--c);background:none;padding:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{font:inherit;font-size:.88rem;font-weight:700;color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:999px;padding:2px 12px;cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--ink);color:var(--sheet);border-color:var(--ink)}
+.group{display:grid;gap:14px}
+.group{margin-top:18px}
+.group > h4{font-family:"Klee One",serif;font-weight:600;font-size:1.4rem;color:var(--c);margin:0}
+.graph-area{margin-top:26px;padding-top:18px;border-top:1px dashed var(--line)}
+.graph-area .head{margin-bottom:10px}
+.sub{font-size:1.3rem}
+.back{font-size:.92rem}
+
+.links{list-style:none;margin:0;padding:0;display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.links a{display:block;padding:12px 14px;border:1px solid var(--line);border-left:4px solid var(--red);border-radius:4px;text-decoration:none;background:var(--paper)}
+.links a:hover{border-color:var(--ink);border-left-color:var(--red)}
+.links .lt{font-weight:700;display:block}
+.links .ln{font-size:.88rem;color:var(--ink-soft)}
+.ex-head{align-items:flex-start}
+.ex-head h2{display:inline}
+.cd{font-family:"Klee One",serif;font-weight:600;font-size:1.05rem;color:var(--red);white-space:nowrap}
+.cd b{font-size:2rem;margin:0 2px;line-height:1}
+.cd.now{border:2px solid var(--red);border-radius:4px;padding:0 8px}
+.cd.done{color:var(--ink-soft)}
+.ex-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.ex-grid.one{grid-template-columns:1fr}
+.ex-card{border:1px solid var(--line);border-left:6px solid var(--c,var(--ink));border-radius:4px;padding:14px 16px;background:var(--paper)}
+.ex-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 12px;margin-bottom:6px}
+.ex-top h4{font-family:"Klee One",serif;font-weight:600;font-size:1.45rem;margin:0}
+.ex-top h4 a{color:var(--c,var(--ink));text-decoration:none}
+.ex-when{font-weight:700}
+.today{display:inline-block;margin-left:8px;font-size:.78rem;color:var(--sheet);background:var(--red);border-radius:3px;padding:0 6px}
+.range{margin:0;padding-left:1.3em}
+.range li{padding:2px 0}
+.range li::marker{color:var(--c,var(--ink))}
+.ex-extra{margin:8px 0 0;font-size:.92rem}
+.ex-extra span{display:inline-block;font-size:.75rem;font-weight:700;border:1.5px solid var(--ink-soft);color:var(--ink-soft);border-radius:3px;padding:0 5px;margin-right:8px}
+.sheet.past{opacity:.55}
+.ex-banner{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 16px;text-decoration:none;background:var(--sheet);border:2px solid var(--red);border-radius:6px;padding:12px 18px}
+.ex-banner .go{margin-left:14px;font-weight:700;text-decoration:underline}
+.wip{display:inline-block;margin:14px 0 0;padding:4px 12px;font-size:.9rem;font-weight:700;color:var(--ink);background:var(--marker);border-radius:3px}
+.pre{margin:0;padding:14px 16px;border:1.5px dashed var(--line);border-radius:4px;background:var(--paper)}
+.pre b{font-family:"Klee One",serif;font-size:1.15rem;color:var(--red)}
+.lib-link{display:flex;gap:12px;align-items:flex-start;margin:14px 0 6px;padding:14px 16px;border:2px solid var(--c);border-radius:6px;text-decoration:none;background:var(--paper)}
+.lib-link:hover{background:var(--sheet)}
+.lib-link small{color:var(--ink-soft)}
+footer{text-align:center;color:var(--ink-soft);font-size:.85rem;padding:0 20px 40px}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <h1><a href="#home" id="siteTitle">数学ノート</a></h1>
+  <div class="meta"><span id="subTitle"></span></div>
+</header>
+
+<nav aria-label="メニュー"><ul id="tabs"></ul></nav>
+
+<main id="view"></main>
+
+<footer id="foot"></footer>
+
+<script>
+(function(){
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const fmtDate = d => { const [, m, dd] = d.split("-").map(Number); return m + "/" + dd; };
+  const libUrl = SITE.videoLibrary || "#";
+  SITE.links.forEach(l => { if (l.url === "VIDEO_LIBRARY") l.url = libUrl; });
+  const KIND = { graph: "グラフ", print: "プリント", video: "動画", link: "リンク" };
+  const today = new Date(); today.setHours(0,0,0,0);
+  const courseById = Object.fromEntries(COURSES.map(c => [c.id, c]));
+  const cvar = id => `--c:var(--${id})`;
+
+  $("#siteTitle").textContent = SITE.title;
+  $("#subTitle").textContent = SITE.subtitle;
+  $("#foot").textContent = SITE.title;
+  if (SITE.editing) document.querySelector(".top").insertAdjacentHTML("beforeend",
+    `<p class="wip" role="note">このページは編集途中です。内容が変わることがあります。</p>`);
+
+  /* タブ */
+  const TABS = [{id:"home", name:"トップ"}, {id:"exam", name:"考査範囲"}, ...COURSES.map(c => ({id:c.id, name:c.name, tab:true}))];
+  $("#tabs").innerHTML = TABS.map(t => `<li><a href="#${t.id}" data-v="${t.id}" ${t.tab ? `style="--tab:var(--${t.id})"` : ""}>${esc(t.name)}</a></li>`).join("");
+
+  /* 部品 */
+  function taskList(list){
+    const rows = list.map(t => ({...t, days: Math.round((new Date(t.due + "T00:00:00") - today) / 86400000)}))
+      .sort((a,b) => { const ad = a.days < 0, bd = b.days < 0; if (ad !== bd) return ad ? 1 : -1; return ad ? b.days - a.days : a.days - b.days; });
+    if (!rows.length) return `<p class="empty">今出ている提出物はありません。</p>`;
+    return `<ul class="tasks">` + rows.map(t => {
+      let badge, cls = "left";
+      if (t.days < 0) badge = `済<small>${fmtDate(t.due)}</small>`;
+      else if (t.days === 0) { badge = `今日<small>まで</small>`; cls += " soon"; }
+      else { badge = `あと${t.days}日<small>${fmtDate(t.due)}</small>`; if (t.days <= 3) cls += " soon"; }
+      const c = courseById[t.course];
+      const tag = c ? `<span class="tag" style="${cvar(c.id)}">${esc(c.name)}</span>` : "";
+      return `<li class="${t.days < 0 ? "done" : ""}"><div class="${cls}">${badge}</div>
+        <div><div class="t">${tag}${esc(t.title)}</div>${t.note ? `<div class="n">${esc(t.note)}</div>` : ""}</div></li>`;
+    }).join("") + `</ul>`;
+  }
+  function itemList(items){
+    if (!items.length) return `<p class="empty">まだ登録されていません。</p>`;
+    return `<ul class="items">` + items.map(it => `
+      <li><a href="${esc(it.url)}" target="_blank" rel="noopener">
+        <span class="kind ${esc(it.type)}">${KIND[it.type] || "リンク"}</span>
+        <span class="it">${esc(it.title)}</span>
+        ${it.note ? `<span class="in">${esc(it.note)}</span>` : ""}
+      </a></li>`).join("") + `</ul>`;
+  }
+
+  /* トップ */
+  function home(){
+    const notices = [...SITE.notices].sort((a,b) => b.date.localeCompare(a.date));
+    return `
+    ${examBanner()}
+    <div class="row">
+      <section class="sheet"><div class="head"><h2>お知らせ</h2></div>
+        ${notices.length ? `<ul class="notices">${notices.map(n => `<li><time datetime="${esc(n.date)}">${fmtDate(n.date)}</time><span>${esc(n.text)}</span></li>`).join("")}</ul>`
+          : `<p class="empty">今はお知らせはありません。</p>`}
+      </section>
+      <section class="sheet"><div class="head"><h2>提出物</h2><p class="hint">締切が近い順</p></div>${taskList(SITE.assignments)}</section>
+    </div>
+    <section class="sheet">
+      <div class="head"><h2>授業のページ</h2><p class="hint">受けている科目を選んでください</p></div>
+      <div class="courses">${COURSES.map(c => {
+        const n = c.units.reduce((s,u) => s + u.items.length, 0);
+        const open = SITE.assignments.filter(t => t.course === c.id && new Date(t.due + "T00:00:00") >= today).length;
+        return `<a class="course" href="#${c.id}" style="${cvar(c.id)}">
+          <span class="cn">${esc(c.name)}</span>
+          <span class="cu">${c.units.length ? c.units.map(u => esc(u.name)).join("／") : (c.videoLibrary ? "解説動画は動画ライブラリへ" : "")}</span>
+          <span class="cc">${open ? `提出物 ${open}件` : `資料 ${n}件`}</span></a>`;
+      }).join("")}</div>
+    </section>
+    <section class="sheet" id="links"><div class="head"><h2>リンク集</h2></div>
+      ${SITE.links.length ? `<ul class="links">${SITE.links.map(l => `<li><a href="${esc(l.url)}" target="_blank" rel="noopener"><span class="lt">${esc(l.title)}</span>${l.note ? `<span class="ln">${esc(l.note)}</span>` : ""}</a></li>`).join("")}</ul>` : ""}
+      <div class="graph-area">
+        <div class="head"><h3 class="sub">授業で使うグラフ</h3><p class="hint">科目を選ぶと絞り込めます</p></div>
+        <div class="chips" id="chips"></div>
+        <div id="graphList"></div>
+      </div>
+    </section>`;
+  }
+
+  /* 科目ページ */
+  function course(c){
+    const tasks = SITE.assignments.filter(t => t.course === c.id);
+    return `
+    <section class="sheet" style="${cvar(c.id)}">
+      <div class="course-title"><h2>${esc(c.name)}</h2><a class="back" href="#home">トップに戻る</a></div>
+      ${c.videoLibrary ? `<a class="lib-link" href="${esc(libUrl)}" target="_blank" rel="noopener"><span class="kind video">動画</span><span><b>解説動画は「数学 動画ライブラリ」にあります</b><br><small>${esc(c.name)}の問題に対応した解説動画を見る</small></span></a>` : ""}
+      <ul class="unit-nav" aria-label="単元">${c.units.map((u,i) => `<li><a href="#${c.id}" data-jump="${c.id}-u${i}">${esc(u.name)}</a></li>`).join("")}</ul>
+    </section>
+    ${examForCourse(c)}
+    ${tasks.length ? `<section class="sheet"><div class="head"><h2>${esc(c.name)}の提出物</h2></div>${taskList(tasks)}</section>` : ""}
+    ${c.units.map((u,i) => `
+      <section class="sheet unit" id="${c.id}-u${i}" style="${cvar(c.id)}">
+        <h3>${esc(u.name)}</h3>${itemList(u.items)}
+      </section>`).join("")}`;
+  }
+
+  /* 授業で使うグラフ（リンク集の中） */
+  let graphFilter = "all";
+  function renderGraphs(){
+    const chipBox = $("#chips"), list = $("#graphList");
+    if (!chipBox) return;
+    chipBox.innerHTML = [{id:"all", name:"すべて"}, ...COURSES].map(c =>
+      `<button data-f="${c.id}" aria-pressed="${graphFilter === c.id}">${esc(c.name)}</button>`).join("");
+    const html = COURSES.filter(c => graphFilter === "all" || graphFilter === c.id).map(c => {
+      const units = c.units.map(u => ({name:u.name, items:u.items.filter(i => i.type === "graph")})).filter(u => u.items.length);
+      if (!units.length) return graphFilter === "all" ? "" : `<p class="empty">${esc(c.name)}のグラフはまだ登録されていません。</p>`;
+      return `<div class="group" style="${cvar(c.id)}"><h4>${esc(c.name)}</h4>
+        ${units.map(u => `<div class="unit"><h3>${esc(u.name)}</h3>${itemList(u.items)}</div>`).join("")}</div>`;
+    }).join("");
+    list.innerHTML = html || `<p class="empty">まだグラフが登録されていません。</p>`;
+    chipBox.querySelectorAll("button").forEach(b => b.addEventListener("click", () => { graphFilter = b.dataset.f; renderGraphs(); }));
+  }
+
+  /* 考査範囲 */
+  const dayDiff = d => Math.round((new Date(d + "T00:00:00") - today) / 86400000);
+  const WD = "日月火水木金土";
+  const fmtDay = d => { const x = new Date(d + "T00:00:00"); return (x.getMonth()+1) + "/" + x.getDate() + "（" + WD[x.getDay()] + "）"; };
+  const examState = e => dayDiff(e.end) < 0 ? "done" : dayDiff(e.start) <= 0 ? "now" : "soon";
+  const examsSorted = () => [...EXAMS].sort((a,b) => {
+    const ad = examState(a) === "done", bd = examState(b) === "done";
+    if (ad !== bd) return ad ? 1 : -1;
+    return ad ? b.start.localeCompare(a.start) : a.start.localeCompare(b.start);
+  });
+  function countdown(e){
+    const st = examState(e);
+    if (st === "done") return `<span class="cd done">終了</span>`;
+    if (st === "now") return `<span class="cd now">考査期間中</span>`;
+    return `<span class="cd">あと<b>${dayDiff(e.start)}</b>日</span>`;
+  }
+  const announced = e => !e.announce || dayDiff(e.announce) <= 0;
+  const notYet = e => `<p class="pre">考査範囲は <b>${fmtDay(e.announce)}</b> に発表します。</p>`;
+  function subjectCard(sub){
+    const c = courseById[sub.course];
+    const d = sub.date ? dayDiff(sub.date) : null;
+    return `<article class="ex-card" style="${c ? cvar(c.id) : ""}">
+      <div class="ex-top">
+        <h4>${c ? `<a href="#${c.id}">${esc(c.name)}</a>` : esc(sub.course)}</h4>
+        <span class="ex-when">${sub.date ? fmtDay(sub.date) : ""}${sub.period ? "　" + esc(sub.period) : ""}${d === 0 ? `<span class="today">今日</span>` : ""}</span>
+      </div>
+      <ul class="range">${(sub.range || []).map(r => `<li>${esc(r)}</li>`).join("")}</ul>
+      ${sub.bring ? `<p class="ex-extra"><span>持ち物</span>${esc(sub.bring)}</p>` : ""}
+      ${sub.note ? `<p class="ex-extra"><span>注意</span>${esc(sub.note)}</p>` : ""}
+    </article>`;
+  }
+  function exam(){
+    if (!EXAMS.length) return `<section class="sheet"><div class="head"><h2>考査範囲</h2></div><p class="empty">次の考査の範囲はまだ発表されていません。</p></section>`;
+    return examsSorted().map(e => {
+      const subs = [...e.subjects].sort((a,b) => (a.date || "").localeCompare(b.date || ""));
+      return `<section class="sheet ${examState(e) === "done" ? "past" : ""}">
+        <div class="head ex-head">
+          <div><h2>${esc(e.name)}</h2><p class="hint">考査 ${fmtDay(e.start)} 〜 ${fmtDay(e.end)}${e.announce ? `　／　考査発表 ${fmtDay(e.announce)}` : ""}</p></div>
+          ${countdown(e)}
+        </div>
+        ${announced(e) ? `<div class="ex-grid">${subs.map(subjectCard).join("")}</div>` : notYet(e)}
+      </section>`;
+    }).join("");
+  }
+  function examForCourse(c){
+    const e = examsSorted().find(e => examState(e) !== "done" && e.subjects.some(s => s.course === c.id));
+    if (!e) return "";
+    const sub = e.subjects.find(s => s.course === c.id);
+    return `<section class="sheet"><div class="head ex-head"><div><h2>考査範囲</h2><p class="hint">${esc(e.name)}</p></div>${countdown(e)}</div>
+      ${announced(e) ? `<div class="ex-grid one">${subjectCard(sub)}</div>` : notYet(e)}</section>`;
+  }
+  function examBanner(){
+    const e = examsSorted().find(e => examState(e) !== "done");
+    if (!e) return "";
+    return `<a class="ex-banner" href="#exam"><span><b>${esc(e.name)}</b>　${fmtDay(e.start)} 〜 ${fmtDay(e.end)}${announced(e) ? "" : `<br><small>考査発表 ${fmtDay(e.announce)}</small>`}</span>
+      <span>${countdown(e)}<span class="go">${announced(e) ? "範囲を見る" : "詳しく見る"}</span></span></a>`;
+  }
+
+  /* 画面切り替え */
+  function render(){
+    const id = location.hash.slice(1) || "home";
+    const v = $("#view");
+    let title = "";
+    if (courseById[id]) { v.innerHTML = course(courseById[id]); title = courseById[id].name; }
+    else if (id === "exam") { v.innerHTML = exam(); title = "考査範囲"; }
+    else { v.innerHTML = home(); }
+    document.title = (title ? title + "｜" : "") + SITE.title;
+    const active = (courseById[id] || id === "exam") ? id : "home";
+    document.querySelectorAll("#tabs a").forEach(a => {
+      if (a.dataset.v === active) a.setAttribute("aria-current", "page");
+      else a.removeAttribute("aria-current");
+    });
+    const cur = $(`#tabs a[aria-current]`); if (cur) cur.scrollIntoView({block:"nearest", inline:"nearest"});
+    v.querySelectorAll("[data-jump]").forEach(a => a.addEventListener("click", e => {
+      e.preventDefault(); document.getElementById(a.dataset.jump).scrollIntoView({behavior:"smooth", block:"start"});
+    }));
+    renderGraphs();
+  }
+  window.addEventListener("hashchange", () => { render(); window.scrollTo(0,0); });
+  render();
+})();
+</script>
+</body>
+</html>
