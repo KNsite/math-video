@@ -3,467 +3,234 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>数学ノート</title>
+<title>数学 動画ライブラリ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Yomogi&family=Zen+Maru+Gothic:wght@500;700&display=swap" rel="stylesheet">
 <script>
 /* =================================================================
    ここだけ書き換えればOK（GitHub上で直接編集できます）
-   ・日付は "YYYY-MM-DD" 形式
-   ・項目を増やすときは { ... }, をコピーして貼り付け
-   ・リンクの type は次の4種類
-       "graph"（グラフ）/ "print"（プリント）/ "video"（動画）/ "link"（その他）
-   ・提出物に course: "m1" のように書くと、その科目のページにも表示されます
-       r1=数学理解Ⅰ  m1=数学Ⅰ  ma=数学A  m2=数学Ⅱ  mb=数学B  m3=数学Ⅲ  mc=数学C
+   ・動画を増やすときは { no: 番号, url: "リンク" }, を1行追加
+     （並び順は自動で番号順になります）
+   ・title を付けると番号の下に小さく表示されます
+       例：{ no: 24, url: "...", title: "2次関数の最大・最小" }
    ================================================================= */
-const SITE = {
-  title: "数学ノート",
-  subtitle: "お知らせ・提出物・各授業のページへの入口です",
-  // 編集途中の表示（完成したら false に）
-  editing: true,
+const LIB = {
+  title: "数学 動画ライブラリ",
+  subtitle: "問題集の番号から、解説動画をすぐに開けます",
+  // 数学ノートのURL（わかったら "#" を差し替え）
+  noteUrl: "#",
+  notice: "動画は学校のMicrosoftアカウントでサインインすると見られます。",
 
-  notices: [
-    { date: "2026-11-11", text: "来週の小テストは「場合の数と確率」の範囲です。" },
-    { date: "2026-11-06", text: "リンク集に「授業で使うグラフ」を追加しました。" }
-  ],
-
-  assignments: [
-    { due: "2026-11-18", course: "ma", title: "確率 演習プリント", note: "授業の最初に回収します" },
-    { due: "2026-11-25", course: "m1", title: "教科書 2次関数 練習問題", note: "ノートに解いて提出" },
-    { due: "2026-11-04", course: "ma", title: "場合の数 まとめプリント", note: "" }
-  ],
-
-  // 数学 動画ライブラリのURL（公開URLがわかったら "#" を差し替え）
-  videoLibrary: "#",
-
-  links: [
-    { title: "数学 動画ライブラリ", url: "VIDEO_LIBRARY", note: "考査前の復習用の解説動画" },
-    { title: "数学教材ライブラリ", url: "#", note: "プリントと動画を単元別に" }
+  subjects: [
+    { id: "r1", name: "数学理解Ⅰ", book: "ニューステージ（数研出版）", groups: [
+      { name: "STEP", label: "ステップ", videos: [
+        { no: 24, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQApQJAmRHTNT5VcRZRnSHavAT7nJrTqg4gpZ6S07Ij_W4s?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=d2lCxS" },
+        { no: 28, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQDRX8C6NxzbS43kiuRc4duAAd90AzDc4qxOqs1eZkETnOs?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=b4Y9hL" },
+        { no: 40, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQCMkbooaI1ER73_YnK5u1EeAU-gllXfsB595G0tS--m84w?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=0eD53r" },
+        { no: 46, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQDUeS-UG3GnTahVwMlYtKf6AWPvh7nX-GlYrv2cR2sv3Ak?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=v2s8PE" },
+        { no: 47, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQBYYxIdFARzT4jRiDzRDwdyAcogNWjM95JN6l7uTmVbEMI?e=Y9JrOV&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D" },
+        { no: 57, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQCFaUAPjcsJSYLmFrJC3V3OAYnfV2bf-K5iqbz3qXazTYI?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=UC3RmT" },
+        { no: 62, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQBKQsNUgS_4SZSqSoglC_lQAdEGi3T5RoQ-BqqE5yHMSoU?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=axbQ3S" },
+        { no: 69, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQBRnHcuKjs0TawLjvUGyj8tAcGyxDbh28LmslaoVcmIaLg?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=aZWWJV" },
+        { no: 80, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQCmR_bxj3c_Qr2RlR2p_3BAATns3RVlWjDfeBRnfwrtYzU?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=RpjmUQ" },
+        { no: 83, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQAhBVAhqNGSSZ-G8Rd3WZXmATHJIpix-0-SDqDQvNOuSFU?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=8thtrs" },
+        { no: 99, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQDZtYRXm1mXQoVjGt9wjRJCAbI6443Bn6MjbzV4AHOBXkQ?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=sDauBd" },
+        { no: 100, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQBxsMqRgx4JRZ85lxJ0EtUOARJHj9Hx6iloPc-w2xSliqE?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=hqzWoZ" },
+        { no: 108, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQAhQvWRgA6oQpL_dzHpIOICAY7kDdHkafSRs-pENbXqg9I?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=xQtpcZ" },
+        { no: 115, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQBoFmryupB4RadHTfH8tTe9ARVJcE9e1Ou5pR2WM__prlk?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=ApvrkG" },
+        { no: 122, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQCtwvIM2PUKRrmOYdbiZ8XDAc1o_k7g8GUCA5BnebtlKjk?e=uyYkcx&nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJTdHJlYW1XZWJBcHAiLCJyZWZlcnJhbFZpZXciOiJTaGFyZURpYWxvZy1MaW5rIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXcifX0%3D" },
+        { no: 127, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQD8FThbDFFTSr951vmDK-pIAbPCrcPc8xm6SGP-Jaa1WVQ?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=F4FRk7" },
+        { no: 131, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQCCI22YlwciTbSx4zf1dJqcATsh5Y-Ew2Hu4BrIAtrcTIU?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=N3U7S8" }
+      ]},
+      { name: "TRIAL", label: "トライアル", videos: [
+        { no: 29, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQBtWMLNverlQahm5n_8VRltAXk_bnOuAQ-l-Sg4rYfmKiU?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=vPM9Gz" },
+        { no: 42, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQDNeC_PV-RLSL7yZ2b7DIkDAVN3o38Yh2PFGRmWvBU-RjM?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=iFOlxM" },
+        { no: 48, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQD0AMLoKB3mSYL7b4-SZoLGAddq02D6N6CP4gl5gEnhs0s?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=mVmHQv" },
+        { no: 58, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQCjvTiAZs6VT5RGCLUf5rL_AXYCsDNYLGu-JWn8GRGzJQ0?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=sQQIb5" },
+        { no: 64, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQCIXl6Oyg6MSK20vzMq86ZDAbolMX7vcwKNcAO5qwo6g3Q?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=xobZqs" },
+        { no: 70, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQA5kKB54seuRaa1lFUJDZYxASr8xJJJTQQARwbLtSgbNvk?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=XIkh6L" },
+        { no: 84, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQAfwiVMex_lR5dSAHpeaf8fAaoZAKdGj2VMws3Z8kKTESs?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=Ccw8v8" },
+        { no: 94, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQA1gp_ExLiHQp3-wrX5EdhVASB2K3_yjgHa549A-CMHDCw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=XbyLKL" },
+        { no: 102, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQDWmWtVUy-gQaRsWXyOBoO_ATD4Or8a0CnSosBBQLk8_G0?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=zhAQcW" },
+        { no: 116, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQAhzSLzsL53RYPg0MDvvaseAfR9G_mZhQVhxo-1_aBBkQc?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=Yhcd65" },
+        { no: 123, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQDtI4XxzNm3RqAiI-d-TpjWAf5z3pXqlnDzTvo2Eh1fvJ4?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=fN6aIK" },
+        { no: 128, url: "https://eduwkym-my.sharepoint.com/:v:/g/personal/kusumi-n004_wakayama-c_ed_jp/IQD4GWo2O4UdT7CZsbWU0QcEAXXW1RpeiQ7efOmiBpWrwyQ?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=o6zvNx" }
+      ]}
+    ]}
   ]
 };
-
-/* ---------- 考査範囲 ----------
-   ・考査を増やすときは { name: ..., subjects: [...] }, をコピー
-   ・subjects の course は上と同じ記号（m1, ma, m2, mb, m3, mc）
-   ・range は1行ずつ "..." で区切って書く
-   ・announce（考査発表日）より前は範囲を表示せず、発表日だけを表示します
-   ・終わった考査は消すか、下に残しておけば「終了」と表示されます */
-const EXAMS = [
-  { name: "2学期期末考査", announce: "2026-11-16", start: "2026-11-26", end: "2026-12-02",
-    subjects: [
-      { course: "m1", date: "2026-11-27", period: "2限",
-        range: ["2次関数（グラフと最大・最小、2次不等式まで）", "教科書 p.80〜p.118", "傍用問題集 p.40〜p.58"],
-        bring: "定規", note: "問題集は考査初日に提出" },
-      { course: "ma", date: "2026-12-01", period: "1限",
-        range: ["場合の数と確率（確率の基本〜反復試行の確率）", "教科書 p.30〜p.62", "確率プリント 全部"],
-        bring: "", note: "プリントは考査当日に回収" }
-    ]
-  }
-];
-
-const COURSES = [
-  { id: "m1", name: "数学Ⅰ", units: [
-    { name: "数と式", items: [] },
-    { name: "集合と命題", items: [] },
-    { name: "2次関数", items: [
-      { type: "graph", title: "y = a(x−p)² + q の平行移動", url: "#", note: "a・p・q を動かして形と頂点を確認" },
-      { type: "graph", title: "2次関数の最大・最小（定義域が動く）", url: "#", note: "" },
-      { type: "print", title: "2次関数 授業プリント①", url: "#", note: "" }
-    ]},
-    { name: "図形と計量", items: [
-      { type: "graph", title: "単位円と三角比", url: "#", note: "" }
-    ]},
-    { name: "データの分析", items: [] }
-  ]},
-  /* 数学理解Ⅰ：教材は数研出版「ニューステージ」受験編
-     解説動画はすべて「数学 動画ライブラリ」に置く（videoLibrary: true でリンクを表示） */
-  { id: "r1", name: "数学理解Ⅰ", videoLibrary: true, units: [] },
-  { id: "ma", name: "数学A", units: [
-    { name: "図形の性質", items: [] },
-    { name: "場合の数と確率", items: [
-      { type: "print", title: "確率 導入プリント", url: "#", note: "" },
-      { type: "video", title: "反復試行の確率 解説", url: "#", note: "" }
-    ]},
-    { name: "数学と人間の活動", items: [] }
-  ]},
-  { id: "m2", name: "数学Ⅱ", units: [
-    { name: "いろいろな式", items: [] },
-    { name: "図形と方程式", items: [] },
-    { name: "指数関数・対数関数", items: [
-      { type: "graph", title: "y = aˣ と y = logₐx", url: "#", note: "底 a を動かして比べる" }
-    ]},
-    { name: "三角関数", items: [
-      { type: "graph", title: "y = a sin(bx) のグラフ", url: "#", note: "" }
-    ]},
-    { name: "微分・積分の考え", items: [] }
-  ]},
-  { id: "mb", name: "数学B", units: [
-    { name: "数列", items: [] },
-    { name: "統計的な推測", items: [] },
-    { name: "数学と社会生活", items: [] }
-  ]},
-  { id: "m3", name: "数学Ⅲ", units: [
-    { name: "極限", items: [] },
-    { name: "微分法", items: [] },
-    { name: "積分法", items: [] }
-  ]},
-  { id: "mc", name: "数学C", units: [
-    { name: "ベクトル", items: [] },
-    { name: "平面上の曲線と複素数平面", items: [] },
-    { name: "数学的な表現の工夫", items: [] }
-  ]}
-];
 </script>
 <style>
 :root{
-  --paper:#F6F8FB; --sheet:#FFFFFF; --grid:#D9E6F2; --ink:#1E3A5F; --ink-soft:#4E6380;
-  --red:#C8323A; --marker:#FFE36E; --line:#C9D6E3;
-  --m1:#2F6DB5; --ma:#C8323A; --m2:#2E7D4F; --mb:#B36A00; --m3:#6A45A8; --mc:#0F7F86; --r1:#A8336F;
+  --wood:#8a5a34; --wood-dark:#6e4527;
+  --board:#2f4538; --board-dark:#24362b;
+  --chalk:#f2ede0; --chalk-dim:#cfd6c9; --chalk-yellow:#e8c468; --chalk-pink:#e2a5a0; --chalk-blue:#9fc2c9;
+  --cork:#c9a06a; --cork-dot:#b88d57;
+  --paper:#fbf6ea; --paper-edge:#e7dcc3;
+  --ink:#3a2e22; --ink-soft:#6b5c48;
+  --page:#efe6d0;
+  --pin:#b5473f;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --paper:#141B24; --sheet:#1B2430; --grid:#222E3B; --ink:#E3ECF6; --ink-soft:#A6B6C9;
-    --red:#FF7A7F; --marker:#7A6A1E; --line:#334355;
-    --m1:#7FB0F0; --ma:#FF8A8F; --m2:#6FD39B; --mb:#F0B45C; --m3:#B79BEA; --mc:#5FD0D6; --r1:#F28CC0;
+    --page:#1d1a15; --cork:#5a4528; --cork-dot:#4c3a21;
+    --paper:#2b261e; --paper-edge:#3c3428; --ink:#f0e8d6; --ink-soft:#c3b598;
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --paper:#141B24; --sheet:#1B2430; --grid:#222E3B; --ink:#E3ECF6; --ink-soft:#A6B6C9;
-  --red:#FF7A7F; --marker:#7A6A1E; --line:#334355;
-  --m1:#7FB0F0; --ma:#FF8A8F; --m2:#6FD39B; --mb:#F0B45C; --m3:#B79BEA; --mc:#5FD0D6; --r1:#F28CC0;
+  --page:#1d1a15; --cork:#5a4528; --cork-dot:#4c3a21;
+  --paper:#2b261e; --paper-edge:#3c3428; --ink:#f0e8d6; --ink-soft:#c3b598;
   color-scheme:dark;
 }
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px)}
 *,*::before,*::after{box-sizing:inherit}
-body{
-  margin:0;color:var(--ink);background-color:var(--paper);
-  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
-  background-size:24px 24px;
-  font-family:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
-  line-height:1.75;font-size:16px;
-}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--sheet)}
-h1,h2,h3{font-family:"Klee One","Hiragino Mincho ProN","Yu Mincho",serif;font-weight:600;margin:0}
-a{color:var(--ink)}
-:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+body{margin:0;background:var(--page);color:var(--ink);font-family:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Yu Gothic",sans-serif;line-height:1.7}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--chalk-yellow);outline-offset:2px}
 
-.top{max-width:1080px;margin:0 auto;padding:40px 20px 8px}
-.top h1{font-size:clamp(2.4rem,7vw,3.6rem);line-height:1.15;letter-spacing:.04em}
-.top h1 a{text-decoration:none}
-.top .meta{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;margin-top:8px;color:var(--ink-soft)}
-.top .cls{font-family:"Klee One",serif;font-size:1.25rem;color:var(--red);font-weight:600}
+/* 黒板ヘッダー */
+.frame{background:linear-gradient(180deg,var(--wood),var(--wood-dark));padding:14px 14px 18px}
+.board{max-width:1040px;margin:0 auto;background:radial-gradient(ellipse at 30% 20%,#3a5545,var(--board) 60%,var(--board-dark));border-radius:6px;padding:28px 28px 22px;color:var(--chalk);box-shadow:inset 0 0 40px rgba(0,0,0,.35)}
+.board h1{font-family:"Yomogi",cursive;font-weight:400;font-size:clamp(2rem,6vw,3rem);margin:0;line-height:1.2;letter-spacing:.05em}
+.board h1 a{text-decoration:none}
+.board .sub{margin:6px 0 0;color:var(--chalk-dim)}
+.board .tray{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:16px;font-size:.9rem}
+.board .tray a{color:var(--chalk-yellow);text-decoration:none;border-bottom:1px dashed var(--chalk-yellow)}
+.chalks{display:flex;gap:8px;justify-content:flex-end;max-width:1040px;margin:8px auto 0}
+.chalks i{display:block;width:34px;height:7px;border-radius:3px}
 
-/* インデックスタブ */
-nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--sheet);border-bottom:1px solid var(--line)}
-nav ul{max-width:1080px;margin:0 auto;padding:8px 12px 0;list-style:none;display:flex;gap:4px;overflow-x:auto}
-nav a{display:block;padding:7px 12px 6px;text-decoration:none;white-space:nowrap;font-weight:700;font-size:.92rem;color:var(--ink-soft);border:1px solid transparent;border-bottom:0;border-radius:6px 6px 0 0;border-top:4px solid var(--tab,transparent)}
-nav a:hover{color:var(--ink)}
-nav a[aria-current="page"]{color:var(--ink);background:var(--paper);border-color:var(--line);border-top-color:var(--tab,var(--ink))}
+main{max-width:1040px;margin:0 auto;padding:24px 16px 56px;display:grid;gap:22px}
+.note{background:var(--paper);border:1px solid var(--paper-edge);border-left:6px solid var(--chalk-yellow);border-radius:4px;padding:10px 14px;font-size:.92rem;margin:0}
 
-main{max-width:1080px;margin:0 auto;padding:24px 20px 64px;display:grid;gap:28px}
-.row{display:grid;gap:28px;grid-template-columns:1fr}
-@media (min-width:820px){.row{grid-template-columns:1fr 1fr}}
-.sheet{background:var(--sheet);border:1px solid var(--line);border-radius:6px;padding:22px 22px 24px;min-width:0}
-.sheet h2{font-size:1.6rem;display:inline;background:linear-gradient(transparent 58%,var(--marker) 58%);padding:0 4px}
-.head{margin-bottom:14px;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px}
-.hint{color:var(--ink-soft);font-size:.9rem;margin:0}
-.empty{color:var(--ink-soft);font-size:.92rem}
+/* コルクボード */
+.cork{background-color:var(--cork);background-image:radial-gradient(var(--cork-dot) 1.2px,transparent 1.4px);background-size:9px 9px;border:10px solid var(--wood);border-radius:6px;padding:22px 18px}
+.cork h2{font-family:"Yomogi",cursive;font-weight:400;font-size:1.7rem;margin:0 0 4px;display:inline-block;background:var(--paper);color:var(--ink);padding:2px 14px;border-radius:2px;transform:rotate(-1deg)}
+.cork .meta{color:#fff;font-size:.9rem;margin:6px 0 14px;text-shadow:0 1px 2px rgba(0,0,0,.5)}
 
-/* お知らせ・提出物 */
-.notices,.tasks,.items{list-style:none;margin:0;padding:0}
-.notices li{padding:10px 0;border-bottom:1px dashed var(--line);display:grid;grid-template-columns:auto 1fr;gap:12px}
-.notices li:last-child,.tasks li:last-child{border-bottom:0}
-.notices time{font-family:"Klee One",serif;font-weight:600;color:var(--ink-soft);white-space:nowrap}
-.tasks li{padding:10px 0;border-bottom:1px dashed var(--line);display:grid;grid-template-columns:4.6em 1fr;gap:12px;align-items:start}
-.left{font-family:"Klee One",serif;font-weight:600;text-align:center;border:2px solid var(--ink);border-radius:4px;padding:2px 0;line-height:1.3}
-.left small{display:block;font-size:.72rem;font-weight:400}
-.left.soon{border-color:var(--red);color:var(--red)}
-.tasks li.done{opacity:.5}
-.tasks li.done .left{border-style:dashed}
-.tasks .t{font-weight:700}
-.tasks .n{color:var(--ink-soft);font-size:.9rem}
-.tag{display:inline-block;font-size:.75rem;font-weight:700;color:var(--sheet);background:var(--c);border-radius:3px;padding:0 6px;margin-right:6px;vertical-align:1px}
+.subjects{display:grid;gap:16px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+.sub-card{position:relative;display:block;text-decoration:none;background:var(--paper);border-radius:3px;padding:20px 18px 16px;box-shadow:0 3px 8px rgba(0,0,0,.25)}
+.sub-card:hover{transform:rotate(-.6deg)}
+.sub-card::before{content:"";position:absolute;top:-6px;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--pin);box-shadow:0 2px 3px rgba(0,0,0,.4)}
+.sub-card b{font-size:1.5rem;display:block}
+.sub-card span{font-size:.88rem;color:var(--ink-soft)}
 
-/* 授業ページ入口 */
-.courses{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
-.course{display:block;text-decoration:none;background:var(--sheet);border:1px solid var(--line);border-top:8px solid var(--c);border-radius:4px 4px 6px 6px;padding:14px 16px 12px}
-.course:hover{border-color:var(--c)}
-.course .cn{font-family:"Klee One",serif;font-weight:600;font-size:1.6rem;line-height:1.2;color:var(--c)}
-.course .cu{display:block;font-size:.82rem;color:var(--ink-soft);margin-top:6px;line-height:1.5}
-.course .cc{display:block;font-size:.82rem;margin-top:6px;font-weight:700}
+/* 検索 */
+.find{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--paper);border-radius:4px;padding:12px 14px;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.find label{font-family:"Yomogi",cursive;font-size:1.2rem}
+.find input{font:inherit;font-size:1.1rem;width:9em;color:var(--ink);background:var(--page);border:1px solid var(--paper-edge);border-radius:4px;padding:6px 10px}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{font:inherit;font-weight:700;color:var(--ink);background:transparent;border:2px solid var(--ink-soft);border-radius:999px;padding:2px 14px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.count{font-size:.9rem;color:var(--ink-soft);margin-left:auto}
 
-/* 単元・リンク */
-.unit-nav{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 4px;padding:0;list-style:none}
-.unit-nav a{display:block;font-size:.88rem;text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:2px 12px;background:var(--sheet)}
-.unit-nav a:hover{border-color:var(--c)}
-.unit h3{font-size:1.35rem;padding-left:10px;border-left:5px solid var(--c);margin-bottom:10px;line-height:1.4}
-.items{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
-.items a{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:start;padding:10px 12px;border:1px solid var(--line);border-radius:4px;text-decoration:none;background:var(--paper)}
-.items a:hover{border-color:var(--ink)}
-.kind{font-size:.75rem;font-weight:700;border:1.5px solid currentColor;border-radius:3px;padding:0 5px;margin-top:3px;white-space:nowrap}
-.kind.graph{color:var(--m1)} .kind.print{color:var(--m2)} .kind.video{color:var(--ma)} .kind.link{color:var(--ink-soft)}
-.it{font-weight:700;line-height:1.5}
-.in{grid-column:2;font-size:.85rem;color:var(--ink-soft);line-height:1.5}
-.course-title{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 16px}
-.course-title h2{font-size:2.4rem;color:var(--c);background:none;padding:0}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chips button{font:inherit;font-size:.88rem;font-weight:700;color:var(--ink);background:var(--sheet);border:1.5px solid var(--line);border-radius:999px;padding:2px 12px;cursor:pointer}
-.chips button[aria-pressed="true"]{background:var(--ink);color:var(--sheet);border-color:var(--ink)}
-.group{display:grid;gap:14px}
-.group{margin-top:18px}
-.group > h4{font-family:"Klee One",serif;font-weight:600;font-size:1.4rem;color:var(--c);margin:0}
-.graph-area{margin-top:26px;padding-top:18px;border-top:1px dashed var(--line)}
-.graph-area .head{margin-bottom:10px}
-.sub{font-size:1.3rem}
-.back{font-size:.92rem}
-
-.links{list-style:none;margin:0;padding:0;display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
-.links a{display:block;padding:12px 14px;border:1px solid var(--line);border-left:4px solid var(--red);border-radius:4px;text-decoration:none;background:var(--paper)}
-.links a:hover{border-color:var(--ink);border-left-color:var(--red)}
-.links .lt{font-weight:700;display:block}
-.links .ln{font-size:.88rem;color:var(--ink-soft)}
-.ex-head{align-items:flex-start}
-.ex-head h2{display:inline}
-.cd{font-family:"Klee One",serif;font-weight:600;font-size:1.05rem;color:var(--red);white-space:nowrap}
-.cd b{font-size:2rem;margin:0 2px;line-height:1}
-.cd.now{border:2px solid var(--red);border-radius:4px;padding:0 8px}
-.cd.done{color:var(--ink-soft)}
-.ex-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
-.ex-grid.one{grid-template-columns:1fr}
-.ex-card{border:1px solid var(--line);border-left:6px solid var(--c,var(--ink));border-radius:4px;padding:14px 16px;background:var(--paper)}
-.ex-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 12px;margin-bottom:6px}
-.ex-top h4{font-family:"Klee One",serif;font-weight:600;font-size:1.45rem;margin:0}
-.ex-top h4 a{color:var(--c,var(--ink));text-decoration:none}
-.ex-when{font-weight:700}
-.today{display:inline-block;margin-left:8px;font-size:.78rem;color:var(--sheet);background:var(--red);border-radius:3px;padding:0 6px}
-.range{margin:0;padding-left:1.3em}
-.range li{padding:2px 0}
-.range li::marker{color:var(--c,var(--ink))}
-.ex-extra{margin:8px 0 0;font-size:.92rem}
-.ex-extra span{display:inline-block;font-size:.75rem;font-weight:700;border:1.5px solid var(--ink-soft);color:var(--ink-soft);border-radius:3px;padding:0 5px;margin-right:8px}
-.sheet.past{opacity:.55}
-.ex-banner{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 16px;text-decoration:none;background:var(--sheet);border:2px solid var(--red);border-radius:6px;padding:12px 18px}
-.ex-banner .go{margin-left:14px;font-weight:700;text-decoration:underline}
-.wip{display:inline-block;margin:14px 0 0;padding:4px 12px;font-size:.9rem;font-weight:700;color:var(--ink);background:var(--marker);border-radius:3px}
-.pre{margin:0;padding:14px 16px;border:1.5px dashed var(--line);border-radius:4px;background:var(--paper)}
-.pre b{font-family:"Klee One",serif;font-size:1.15rem;color:var(--red)}
-.lib-link{display:flex;gap:12px;align-items:flex-start;margin:14px 0 6px;padding:14px 16px;border:2px solid var(--c);border-radius:6px;text-decoration:none;background:var(--paper)}
-.lib-link:hover{background:var(--sheet)}
-.lib-link small{color:var(--ink-soft)}
-footer{text-align:center;color:var(--ink-soft);font-size:.85rem;padding:0 20px 40px}
+/* 番号札 */
+.group{margin-top:20px}
+.group h3{font-family:"Yomogi",cursive;font-weight:400;font-size:1.5rem;color:#fff;margin:0 0 10px;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+.group h3 small{font-size:1rem;margin-left:8px}
+.tiles{list-style:none;margin:0;padding:0;display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(96px,1fr))}
+.tile{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:96px;text-decoration:none;background:var(--paper);border-radius:3px;border-top:7px solid var(--tc);box-shadow:0 3px 6px rgba(0,0,0,.25);padding:8px 6px;text-align:center}
+.tiles li:nth-child(3n+1) .tile{transform:rotate(-1.2deg)}
+.tiles li:nth-child(3n+2) .tile{transform:rotate(.8deg)}
+.tile:hover{transform:translateY(-2px) rotate(0)!important}
+.tile .k{font-size:.72rem;font-weight:700;color:var(--ink-soft);letter-spacing:.08em}
+.tile .n{font-size:2rem;font-weight:700;line-height:1.1}
+.tile .t{font-size:.75rem;color:var(--ink-soft);line-height:1.35;margin-top:2px}
+.tile .play{font-size:.72rem;margin-top:4px;color:var(--ink-soft)}
+.STEP{--tc:var(--chalk-blue)} .TRIAL{--tc:var(--chalk-pink)}
+.empty{background:var(--paper);border-radius:3px;padding:14px;margin:0}
+.back{color:#fff;font-size:.92rem}
+footer{text-align:center;color:var(--ink-soft);font-size:.85rem;padding:0 16px 32px}
+@media (prefers-reduced-motion:reduce){.tile,.sub-card{transform:none!important}}
 </style>
 </head>
 <body>
-
-<header class="top">
-  <h1><a href="#home" id="siteTitle">数学ノート</a></h1>
-  <div class="meta"><span id="subTitle"></span></div>
-</header>
-
-<nav aria-label="メニュー"><ul id="tabs"></ul></nav>
+<div class="frame">
+  <header class="board">
+    <h1><a href="#home" id="title"></a></h1>
+    <p class="sub" id="subtitle"></p>
+    <div class="tray"><a id="noteLink" href="#">数学ノートに戻る</a></div>
+  </header>
+  <div class="chalks" aria-hidden="true"><i style="background:var(--chalk)"></i><i style="background:var(--chalk-yellow)"></i><i style="background:var(--chalk-pink)"></i><i style="background:var(--chalk-blue)"></i></div>
+</div>
 
 <main id="view"></main>
-
 <footer id="foot"></footer>
 
 <script>
 (function(){
   const $ = s => document.querySelector(s);
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-  const fmtDate = d => { const [, m, dd] = d.split("-").map(Number); return m + "/" + dd; };
-  const libUrl = SITE.videoLibrary || "#";
-  SITE.links.forEach(l => { if (l.url === "VIDEO_LIBRARY") l.url = libUrl; });
-  const KIND = { graph: "グラフ", print: "プリント", video: "動画", link: "リンク" };
-  const today = new Date(); today.setHours(0,0,0,0);
-  const courseById = Object.fromEntries(COURSES.map(c => [c.id, c]));
-  const cvar = id => `--c:var(--${id})`;
+  const byId = Object.fromEntries(LIB.subjects.map(s => [s.id, s]));
+  $("#title").textContent = LIB.title;
+  $("#subtitle").textContent = LIB.subtitle;
+  $("#noteLink").href = LIB.noteUrl || "#";
+  $("#foot").textContent = LIB.title;
+  const total = s => s.groups.reduce((a,g) => a + g.videos.length, 0);
+  const note = LIB.notice ? `<p class="note">${esc(LIB.notice)}</p>` : "";
 
-  $("#siteTitle").textContent = SITE.title;
-  $("#subTitle").textContent = SITE.subtitle;
-  $("#foot").textContent = SITE.title;
-  if (SITE.editing) document.querySelector(".top").insertAdjacentHTML("beforeend",
-    `<p class="wip" role="note">このページは編集途中です。内容が変わることがあります。</p>`);
-
-  /* タブ */
-  const TABS = [{id:"home", name:"トップ"}, {id:"exam", name:"考査範囲"}, ...COURSES.map(c => ({id:c.id, name:c.name, tab:true}))];
-  $("#tabs").innerHTML = TABS.map(t => `<li><a href="#${t.id}" data-v="${t.id}" ${t.tab ? `style="--tab:var(--${t.id})"` : ""}>${esc(t.name)}</a></li>`).join("");
-
-  /* 部品 */
-  function taskList(list){
-    const rows = list.map(t => ({...t, days: Math.round((new Date(t.due + "T00:00:00") - today) / 86400000)}))
-      .sort((a,b) => { const ad = a.days < 0, bd = b.days < 0; if (ad !== bd) return ad ? 1 : -1; return ad ? b.days - a.days : a.days - b.days; });
-    if (!rows.length) return `<p class="empty">今出ている提出物はありません。</p>`;
-    return `<ul class="tasks">` + rows.map(t => {
-      let badge, cls = "left";
-      if (t.days < 0) badge = `済<small>${fmtDate(t.due)}</small>`;
-      else if (t.days === 0) { badge = `今日<small>まで</small>`; cls += " soon"; }
-      else { badge = `あと${t.days}日<small>${fmtDate(t.due)}</small>`; if (t.days <= 3) cls += " soon"; }
-      const c = courseById[t.course];
-      const tag = c ? `<span class="tag" style="${cvar(c.id)}">${esc(c.name)}</span>` : "";
-      return `<li class="${t.days < 0 ? "done" : ""}"><div class="${cls}">${badge}</div>
-        <div><div class="t">${tag}${esc(t.title)}</div>${t.note ? `<div class="n">${esc(t.note)}</div>` : ""}</div></li>`;
-    }).join("") + `</ul>`;
-  }
-  function itemList(items){
-    if (!items.length) return `<p class="empty">まだ登録されていません。</p>`;
-    return `<ul class="items">` + items.map(it => `
-      <li><a href="${esc(it.url)}" target="_blank" rel="noopener">
-        <span class="kind ${esc(it.type)}">${KIND[it.type] || "リンク"}</span>
-        <span class="it">${esc(it.title)}</span>
-        ${it.note ? `<span class="in">${esc(it.note)}</span>` : ""}
-      </a></li>`).join("") + `</ul>`;
-  }
-
-  /* トップ */
   function home(){
-    const notices = [...SITE.notices].sort((a,b) => b.date.localeCompare(a.date));
-    return `
-    ${examBanner()}
-    <div class="row">
-      <section class="sheet"><div class="head"><h2>お知らせ</h2></div>
-        ${notices.length ? `<ul class="notices">${notices.map(n => `<li><time datetime="${esc(n.date)}">${fmtDate(n.date)}</time><span>${esc(n.text)}</span></li>`).join("")}</ul>`
-          : `<p class="empty">今はお知らせはありません。</p>`}
-      </section>
-      <section class="sheet"><div class="head"><h2>提出物</h2><p class="hint">締切が近い順</p></div>${taskList(SITE.assignments)}</section>
-    </div>
-    <section class="sheet">
-      <div class="head"><h2>授業のページ</h2><p class="hint">受けている科目を選んでください</p></div>
-      <div class="courses">${COURSES.map(c => {
-        const n = c.units.reduce((s,u) => s + u.items.length, 0);
-        const open = SITE.assignments.filter(t => t.course === c.id && new Date(t.due + "T00:00:00") >= today).length;
-        return `<a class="course" href="#${c.id}" style="${cvar(c.id)}">
-          <span class="cn">${esc(c.name)}</span>
-          <span class="cu">${c.units.length ? c.units.map(u => esc(u.name)).join("／") : (c.videoLibrary ? "解説動画は動画ライブラリへ" : "")}</span>
-          <span class="cc">${open ? `提出物 ${open}件` : `資料 ${n}件`}</span></a>`;
-      }).join("")}</div>
-    </section>
-    <section class="sheet" id="links"><div class="head"><h2>リンク集</h2></div>
-      ${SITE.links.length ? `<ul class="links">${SITE.links.map(l => `<li><a href="${esc(l.url)}" target="_blank" rel="noopener"><span class="lt">${esc(l.title)}</span>${l.note ? `<span class="ln">${esc(l.note)}</span>` : ""}</a></li>`).join("")}</ul>` : ""}
-      <div class="graph-area">
-        <div class="head"><h3 class="sub">授業で使うグラフ</h3><p class="hint">科目を選ぶと絞り込めます</p></div>
-        <div class="chips" id="chips"></div>
-        <div id="graphList"></div>
-      </div>
+    return `${note}
+    <section class="cork"><h2>科目をえらぶ</h2>
+      <p class="meta">動画がある科目だけ並んでいます</p>
+      <div class="subjects">${LIB.subjects.map(s => `<a class="sub-card" href="#${s.id}"><b>${esc(s.name)}</b>
+        <span>${esc(s.book || "")}${s.book ? "　" : ""}動画 ${total(s)}本</span></a>`).join("")}</div>
     </section>`;
   }
 
-  /* 科目ページ */
-  function course(c){
-    const tasks = SITE.assignments.filter(t => t.course === c.id);
-    return `
-    <section class="sheet" style="${cvar(c.id)}">
-      <div class="course-title"><h2>${esc(c.name)}</h2><a class="back" href="#home">トップに戻る</a></div>
-      ${c.videoLibrary ? `<a class="lib-link" href="${esc(libUrl)}" target="_blank" rel="noopener"><span class="kind video">動画</span><span><b>解説動画は「数学 動画ライブラリ」にあります</b><br><small>${esc(c.name)}の問題に対応した解説動画を見る</small></span></a>` : ""}
-      <ul class="unit-nav" aria-label="単元">${c.units.map((u,i) => `<li><a href="#${c.id}" data-jump="${c.id}-u${i}">${esc(u.name)}</a></li>`).join("")}</ul>
-    </section>
-    ${examForCourse(c)}
-    ${tasks.length ? `<section class="sheet"><div class="head"><h2>${esc(c.name)}の提出物</h2></div>${taskList(tasks)}</section>` : ""}
-    ${c.units.map((u,i) => `
-      <section class="sheet unit" id="${c.id}-u${i}" style="${cvar(c.id)}">
-        <h3>${esc(u.name)}</h3>${itemList(u.items)}
-      </section>`).join("")}`;
-  }
-
-  /* 授業で使うグラフ（リンク集の中） */
-  let graphFilter = "all";
-  function renderGraphs(){
-    const chipBox = $("#chips"), list = $("#graphList");
-    if (!chipBox) return;
-    chipBox.innerHTML = [{id:"all", name:"すべて"}, ...COURSES].map(c =>
-      `<button data-f="${c.id}" aria-pressed="${graphFilter === c.id}">${esc(c.name)}</button>`).join("");
-    const html = COURSES.filter(c => graphFilter === "all" || graphFilter === c.id).map(c => {
-      const units = c.units.map(u => ({name:u.name, items:u.items.filter(i => i.type === "graph")})).filter(u => u.items.length);
-      if (!units.length) return graphFilter === "all" ? "" : `<p class="empty">${esc(c.name)}のグラフはまだ登録されていません。</p>`;
-      return `<div class="group" style="${cvar(c.id)}"><h4>${esc(c.name)}</h4>
-        ${units.map(u => `<div class="unit"><h3>${esc(u.name)}</h3>${itemList(u.items)}</div>`).join("")}</div>`;
-    }).join("");
-    list.innerHTML = html || `<p class="empty">まだグラフが登録されていません。</p>`;
-    chipBox.querySelectorAll("button").forEach(b => b.addEventListener("click", () => { graphFilter = b.dataset.f; renderGraphs(); }));
-  }
-
-  /* 考査範囲 */
-  const dayDiff = d => Math.round((new Date(d + "T00:00:00") - today) / 86400000);
-  const WD = "日月火水木金土";
-  const fmtDay = d => { const x = new Date(d + "T00:00:00"); return (x.getMonth()+1) + "/" + x.getDate() + "（" + WD[x.getDay()] + "）"; };
-  const examState = e => dayDiff(e.end) < 0 ? "done" : dayDiff(e.start) <= 0 ? "now" : "soon";
-  const examsSorted = () => [...EXAMS].sort((a,b) => {
-    const ad = examState(a) === "done", bd = examState(b) === "done";
-    if (ad !== bd) return ad ? 1 : -1;
-    return ad ? b.start.localeCompare(a.start) : a.start.localeCompare(b.start);
-  });
-  function countdown(e){
-    const st = examState(e);
-    if (st === "done") return `<span class="cd done">終了</span>`;
-    if (st === "now") return `<span class="cd now">考査期間中</span>`;
-    return `<span class="cd">あと<b>${dayDiff(e.start)}</b>日</span>`;
-  }
-  const announced = e => !e.announce || dayDiff(e.announce) <= 0;
-  const notYet = e => `<p class="pre">考査範囲は <b>${fmtDay(e.announce)}</b> に発表します。</p>`;
-  function subjectCard(sub){
-    const c = courseById[sub.course];
-    const d = sub.date ? dayDiff(sub.date) : null;
-    return `<article class="ex-card" style="${c ? cvar(c.id) : ""}">
-      <div class="ex-top">
-        <h4>${c ? `<a href="#${c.id}">${esc(c.name)}</a>` : esc(sub.course)}</h4>
-        <span class="ex-when">${sub.date ? fmtDay(sub.date) : ""}${sub.period ? "　" + esc(sub.period) : ""}${d === 0 ? `<span class="today">今日</span>` : ""}</span>
+  let filter = "all", query = "";
+  function subject(s){
+    const segs = [{id:"all", name:"すべて"}, ...s.groups.map(g => ({id:g.name, name:`${g.name}（${g.label}）`}))];
+    return `${note}
+    <section class="cork">
+      <h2>${esc(s.name)}</h2>
+      <p class="meta">${esc(s.book || "")}　<a class="back" href="#home">科目一覧へ</a></p>
+      <div class="find">
+        <label for="q">問題番号</label>
+        <input id="q" inputmode="numeric" autocomplete="off" placeholder="例：24" value="${esc(query)}">
+        <div class="seg" role="group" aria-label="種類">${segs.map(x => `<button data-f="${x.id}" aria-pressed="${filter === x.id}">${esc(x.name)}</button>`).join("")}</div>
+        <span class="count" id="count" role="status"></span>
       </div>
-      <ul class="range">${(sub.range || []).map(r => `<li>${esc(r)}</li>`).join("")}</ul>
-      ${sub.bring ? `<p class="ex-extra"><span>持ち物</span>${esc(sub.bring)}</p>` : ""}
-      ${sub.note ? `<p class="ex-extra"><span>注意</span>${esc(sub.note)}</p>` : ""}
-    </article>`;
+      <div id="groups"></div>
+    </section>`;
   }
-  function exam(){
-    if (!EXAMS.length) return `<section class="sheet"><div class="head"><h2>考査範囲</h2></div><p class="empty">次の考査の範囲はまだ発表されていません。</p></section>`;
-    return examsSorted().map(e => {
-      const subs = [...e.subjects].sort((a,b) => (a.date || "").localeCompare(b.date || ""));
-      return `<section class="sheet ${examState(e) === "done" ? "past" : ""}">
-        <div class="head ex-head">
-          <div><h2>${esc(e.name)}</h2><p class="hint">考査 ${fmtDay(e.start)} 〜 ${fmtDay(e.end)}${e.announce ? `　／　考査発表 ${fmtDay(e.announce)}` : ""}</p></div>
-          ${countdown(e)}
-        </div>
-        ${announced(e) ? `<div class="ex-grid">${subs.map(subjectCard).join("")}</div>` : notYet(e)}
-      </section>`;
+  function renderGroups(s){
+    const q = query.replace(/[０-９]/g, c => String.fromCharCode(c.charCodeAt(0) - 0xFEE0)).replace(/[^0-9]/g, "");
+    let n = 0;
+    const html = s.groups.filter(g => filter === "all" || filter === g.name).map(g => {
+      const vs = [...g.videos].sort((a,b) => a.no - b.no).filter(v => !q || String(v.no).startsWith(q));
+      n += vs.length;
+      if (!vs.length) return "";
+      return `<div class="group ${esc(g.name)}"><h3>${esc(g.name)}<small>${esc(g.label)}</small></h3>
+        <ul class="tiles">${vs.map(v => `<li><a class="tile" href="${esc(v.url)}" target="_blank" rel="noopener" aria-label="${esc(g.name)} ${v.no} の解説動画を開く">
+          <span class="k">${esc(g.name)}</span><span class="n">${v.no}</span>${v.title ? `<span class="t">${esc(v.title)}</span>` : ""}<span class="play">▶ 動画</span></a></li>`).join("")}</ul></div>`;
     }).join("");
-  }
-  function examForCourse(c){
-    const e = examsSorted().find(e => examState(e) !== "done" && e.subjects.some(s => s.course === c.id));
-    if (!e) return "";
-    const sub = e.subjects.find(s => s.course === c.id);
-    return `<section class="sheet"><div class="head ex-head"><div><h2>考査範囲</h2><p class="hint">${esc(e.name)}</p></div>${countdown(e)}</div>
-      ${announced(e) ? `<div class="ex-grid one">${subjectCard(sub)}</div>` : notYet(e)}</section>`;
-  }
-  function examBanner(){
-    const e = examsSorted().find(e => examState(e) !== "done");
-    if (!e) return "";
-    return `<a class="ex-banner" href="#exam"><span><b>${esc(e.name)}</b>　${fmtDay(e.start)} 〜 ${fmtDay(e.end)}${announced(e) ? "" : `<br><small>考査発表 ${fmtDay(e.announce)}</small>`}</span>
-      <span>${countdown(e)}<span class="go">${announced(e) ? "範囲を見る" : "詳しく見る"}</span></span></a>`;
+    $("#groups").innerHTML = html || `<div class="group"><p class="empty">${q ? `${esc(q)} 番の動画はまだありません。番号を確かめるか、「すべて」を選んでください。` : "まだ動画が登録されていません。"}</p></div>`;
+    $("#count").textContent = `${n}本`;
   }
 
-  /* 画面切り替え */
   function render(){
-    const id = location.hash.slice(1) || "home";
+    const id = location.hash.slice(1);
+    const s = byId[id];
     const v = $("#view");
-    let title = "";
-    if (courseById[id]) { v.innerHTML = course(courseById[id]); title = courseById[id].name; }
-    else if (id === "exam") { v.innerHTML = exam(); title = "考査範囲"; }
-    else { v.innerHTML = home(); }
-    document.title = (title ? title + "｜" : "") + SITE.title;
-    const active = (courseById[id] || id === "exam") ? id : "home";
-    document.querySelectorAll("#tabs a").forEach(a => {
-      if (a.dataset.v === active) a.setAttribute("aria-current", "page");
-      else a.removeAttribute("aria-current");
-    });
-    const cur = $(`#tabs a[aria-current]`); if (cur) cur.scrollIntoView({block:"nearest", inline:"nearest"});
-    v.querySelectorAll("[data-jump]").forEach(a => a.addEventListener("click", e => {
-      e.preventDefault(); document.getElementById(a.dataset.jump).scrollIntoView({behavior:"smooth", block:"start"});
-    }));
-    renderGraphs();
+    if (s){
+      v.innerHTML = subject(s);
+      renderGroups(s);
+      $("#q").addEventListener("input", e => { query = e.target.value; renderGroups(s); });
+      v.querySelectorAll(".seg button").forEach(b => b.addEventListener("click", () => {
+        filter = b.dataset.f;
+        v.querySelectorAll(".seg button").forEach(x => x.setAttribute("aria-pressed", x === b));
+        renderGroups(s);
+      }));
+      document.title = s.name + "｜" + LIB.title;
+    } else {
+      v.innerHTML = home();
+      document.title = LIB.title;
+    }
   }
-  window.addEventListener("hashchange", () => { render(); window.scrollTo(0,0); });
+  window.addEventListener("hashchange", () => { filter = "all"; query = ""; render(); window.scrollTo(0,0); });
   render();
 })();
 </script>
